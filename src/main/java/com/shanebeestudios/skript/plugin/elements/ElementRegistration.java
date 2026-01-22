@@ -1,5 +1,6 @@
 package com.shanebeestudios.skript.plugin.elements;
 
+import com.shanebeestudios.skript.api.skript.ItemUtils;
 import com.shanebeestudios.skript.plugin.Skript;
 import com.shanebeestudios.skript.plugin.elements.conditions.ConditionHandler;
 import com.shanebeestudios.skript.plugin.elements.effects.EffectHandler;
@@ -27,6 +28,7 @@ public class ElementRegistration {
         Parser.init(new String[0], new String[0], new String[0], true);
 
         // TYPES
+        ItemUtils.init();
         Types.register(this.registration);
         TypeManager.register(this.registration);
 
