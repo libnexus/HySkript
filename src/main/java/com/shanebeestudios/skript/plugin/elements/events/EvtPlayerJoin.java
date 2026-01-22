@@ -16,8 +16,7 @@ public class EvtPlayerJoin extends SkriptEvent {
             .setHandledContexts(PlayerEventContext.class)
             .register();
 
-        registration.addContextValue(PlayerEventContext.class, Player.class,
-            true, "player", PlayerEventContext::getPlayer);
+        registration.addContextValue(PlayerEventContext.class, Player.class, true, "player", PlayerEventContext::getPlayer);
     }
 
     private int pattern;
@@ -41,7 +40,13 @@ public class EvtPlayerJoin extends SkriptEvent {
 
     @Override
     public String toString(@Nullable TriggerContext ctx, boolean debug) {
-        return "";
+        String t = switch (this.pattern) {
+            case 0 -> "connect";
+            case 1 -> "ready";
+            case 2 -> "quit";
+            default -> "unknown";
+        };
+        return "player " + t;
     }
 
 }
