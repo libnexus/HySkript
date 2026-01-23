@@ -42,12 +42,6 @@ public class ExprInventory implements Expression<Inventory> {
     }
 
     @Override
-    public boolean acceptsChange(ChangeMode mode, Class<?> needle, boolean isSingle) {
-        // This "object" part is because Variables aren't counting for the actual type TODO hopefully fix the parser
-        return mode == ChangeMode.ADD && (needle == ItemStack.class || needle == Object.class);
-    }
-
-    @Override
     public void change(TriggerContext ctx, ChangeMode changeMode, Object[] changeWith) {
         Inventory[] toChange = getValues(ctx);
         if (changeMode == ChangeMode.ADD) {
