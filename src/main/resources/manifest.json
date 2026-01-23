@@ -13,6 +13,6 @@
   "Dependencies": {},
   "OptionalDependencies": {},
   "DisabledByDefault": false,
-  "Main": "com.shanebeestudios.skript.plugin.HySk",
+  "Main": "com.github.skriptdev.skript.plugin.HySk",
   "IncludesAssetPack": false
 }
