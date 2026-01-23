@@ -3,6 +3,7 @@ package com.github.skriptdev.skript.plugin;
 import com.github.skriptdev.skript.api.skript.ScriptsLoader;
 import com.github.skriptdev.skript.api.utils.Utils;
 import com.github.skriptdev.skript.plugin.elements.ElementRegistration;
+import io.github.syst3ms.skriptparser.Parser;
 import io.github.syst3ms.skriptparser.lang.Trigger;
 import io.github.syst3ms.skriptparser.log.SkriptLogger;
 import io.github.syst3ms.skriptparser.registration.SkriptAddon;
@@ -37,11 +38,31 @@ public class Skript extends SkriptAddon {
         // FINALIZE SETUP
         this.registration.register();
 
+        printSyntaxCount();
         Utils.log("HySkript setup complete!");
 
         // LOAD SCRIPTS
         this.scriptsLoader = new ScriptsLoader(this);
         this.scriptsLoader.loadScripts(this.scriptsPath, false);
+    }
+
+    private void printSyntaxCount() {
+        SkriptRegistration mainRegistration = Parser.getMainRegistration();
+
+        int eventSize = this.registration.getEvents().size() + mainRegistration.getEvents().size();
+        int effectSize = this.registration.getEffects().size() + mainRegistration.getEffects().size();
+        int expsSize = this.registration.getExpressions().size() + mainRegistration.getExpressions().size();
+        int secSize = this.registration.getSections().size() + mainRegistration.getSections().size();
+        int typeSize = this.registration.getTypes().size() + mainRegistration.getTypes().size();
+
+        int total = eventSize + effectSize + expsSize + secSize + typeSize;
+
+        Utils.log("Loaded HySkript %s elements:", total);
+        Utils.log("- Types: %s", typeSize);
+        Utils.log("- Events: %s ", eventSize);
+        Utils.log("- Effects: %s", effectSize);
+        Utils.log("- Expressions: %s", expsSize);
+        Utils.log("- Sections: %s", secSize);
     }
 
     public HySk getPlugin() {
