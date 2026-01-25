@@ -189,6 +189,8 @@ public class ScriptCommand extends SkriptEvent {
                 }
                 setupArg(arg);
             }
+        } else {
+            this.command = commandLine;
         }
         if (this.command.isEmpty()) {
             parseContext.getLogger().error("Command cannot be empty", ErrorType.SEMANTIC_ERROR);
