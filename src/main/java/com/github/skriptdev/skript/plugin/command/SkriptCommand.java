@@ -62,7 +62,7 @@ public class SkriptCommand extends AbstractCommandCollection {
         protected @Nullable CompletableFuture<Void> execute(@NotNull CommandContext commandContext) {
             return CompletableFuture.runAsync(() -> {
                 Skript skript = HySk.getInstance().getSkript();
-                skript.getElementRegistration().clearTriggers();
+
                 Path scriptsPath = skript.getScriptsPath();
                 if (this.scriptArg.provided(commandContext)) {
                     String scriptName = this.scriptArg.get(commandContext);

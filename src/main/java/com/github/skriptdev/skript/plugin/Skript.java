@@ -94,8 +94,8 @@ public class Skript extends SkriptAddon {
     }
 
     @Override
-    public void handleTrigger(@NotNull Trigger trigger) {
-        this.elementRegistration.handleTrigger(trigger);
+    public void handleTrigger(@NotNull String script, @NotNull Trigger trigger) {
+        this.elementRegistration.handleTrigger(script, trigger);
     }
 
 }

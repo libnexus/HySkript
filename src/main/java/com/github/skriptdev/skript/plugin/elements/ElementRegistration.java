@@ -14,6 +14,7 @@ import io.github.syst3ms.skriptparser.Parser;
 import io.github.syst3ms.skriptparser.lang.Trigger;
 import io.github.syst3ms.skriptparser.registration.SkriptRegistration;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ElementRegistration {
 
@@ -55,12 +56,12 @@ public class ElementRegistration {
         return this.listenerHandler;
     }
 
-    public void clearTriggers() {
-        this.listenerHandler.clearTriggers();
+    public void clearTriggers(@Nullable String script) {
+        this.listenerHandler.clearTriggers(script);
     }
 
-    public void handleTrigger(@NotNull Trigger trigger) {
-        this.listenerHandler.handleTrigger(trigger);
+    public void handleTrigger(String script, @NotNull Trigger trigger) {
+        this.listenerHandler.handleTrigger(script, trigger);
     }
 
     public void finishedLoading() {

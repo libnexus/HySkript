@@ -8,17 +8,19 @@ import io.github.syst3ms.skriptparser.lang.Statement;
 import io.github.syst3ms.skriptparser.lang.Trigger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PlayerListener {
 
-    private final List<Trigger> chatTriggers = new ArrayList<>();
+    private final Map<String,List<Trigger>> chatTriggers = new HashMap<>();
 
     public PlayerListener(EventRegistry registry) {
         registry.registerAsyncGlobal(PlayerChatEvent.class, future -> {
             future.thenAccept(event -> {
                 PlayerChatEventContext ctx = new PlayerChatEventContext(event.getContent(), event.getSender());
-                for (Trigger trigger : this.chatTriggers) {
+                for (Trigger trigger : this.chatTriggers.values().stream().flatMap(List::stream).toList()) {
                     Statement.runAll(trigger, ctx);
                 }
                 if (ctx.isMessageChanged()) event.setContent(ctx.getMessage()[0]);
@@ -28,13 +30,17 @@ public class PlayerListener {
         });
     }
 
-    public void clearTriggers() {
-        this.chatTriggers.clear();
+    public void clearTriggers(String script) {
+        if (script == null) {
+            this.chatTriggers.clear();
+        } else {
+            this.chatTriggers.put(script, new ArrayList<>());
+        }
     }
 
-    public void handleTrigger(Trigger trigger) {
+    public void handleTrigger(String script, Trigger trigger) {
         if (trigger.getEvent() instanceof EvtPlayerChat) {
-            this.chatTriggers.add(trigger);
+            this.chatTriggers.computeIfAbsent(script, k -> new ArrayList<>()).add(trigger);
         }
     }
 
