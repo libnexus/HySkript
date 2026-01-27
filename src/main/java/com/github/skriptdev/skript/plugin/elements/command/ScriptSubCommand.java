@@ -41,7 +41,6 @@ public class ScriptSubCommand extends CodeSection implements ScriptCommandParent
 
     @Override
     public void loadChild(ScriptCommandBuilder parent, SkriptLogger logger) {
-        Utils.log("Loading child");
         this.commandBuilder.setupCommand(this.section, this.parserState, logger);
         this.commandBuilder.commandType = parent.getCommandType();
         this.commandBuilder.build(parent);
@@ -49,7 +48,6 @@ public class ScriptSubCommand extends CodeSection implements ScriptCommandParent
 
     @Override
     public boolean loadSection(@NotNull FileSection section, @NotNull ParserState parserState, @NotNull SkriptLogger logger) {
-        Utils.log("Loading section");
         this.section = section;
         this.parserState = parserState;
         return true;
