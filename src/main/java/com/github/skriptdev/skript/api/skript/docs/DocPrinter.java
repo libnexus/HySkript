@@ -156,6 +156,7 @@ public class DocPrinter {
         types.forEach(type -> {
             Documentation documentation = type.getDocumentation();
             printDocumentation("Type", writer, documentation, List.of());
+            writer.println("- **Can Serialize**: " + type.getSerializer().isPresent());
         });
     }
 
