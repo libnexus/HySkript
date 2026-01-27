@@ -5,8 +5,11 @@ import com.github.skriptdev.skript.api.skript.registration.AssetStoreRegistry;
 import com.github.skriptdev.skript.api.skript.registration.EnumRegistry;
 import com.github.skriptdev.skript.api.skript.registration.NPCRegistry;
 import com.github.skriptdev.skript.api.utils.Utils;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.hypixel.hytale.assetstore.AssetRegistry;
 import com.hypixel.hytale.builtin.hytalegenerator.assets.biomes.BiomeAsset;
+import com.hypixel.hytale.codec.ExtraInfo;
 import com.hypixel.hytale.common.util.java.ManifestUtil;
 import com.hypixel.hytale.math.vector.Location;
 import com.hypixel.hytale.math.vector.Vector3d;
@@ -42,6 +45,10 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import io.github.syst3ms.skriptparser.registration.SkriptRegistration;
 import io.github.syst3ms.skriptparser.types.TypeManager;
+import io.github.syst3ms.skriptparser.types.changers.TypeSerializer;
+import org.bson.BsonDocument;
+import org.bson.BsonValue;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -66,6 +73,20 @@ public class Types {
             .description("Represents a UUID.")
             .examples("set {_uuid} to uuid of {_player}")
             .since("INSERT VERSION")
+            .serializer(new TypeSerializer<>() {
+                // TODO no clue if this actually works, will need to test
+                @Override
+                public JsonElement serialize(@NotNull Gson gson, @NotNull UUID uuid) {
+                    String json = gson.toJson(uuid, UUID.class);
+                    return gson.fromJson(json, JsonElement.class);
+                }
+
+                @Override
+                public UUID deserialize(@NotNull Gson gson, @NotNull JsonElement element) {
+                    UUID uuid = gson.fromJson(element.toString(), UUID.class);
+                    return uuid == null ? UUID.fromString(element.getAsString()) : uuid;
+                }
+            })
             .register();
     }
 
@@ -91,6 +112,20 @@ public class Types {
             .name("Message")
             .description("Represents a stylized message sent to a message receiver.")
             .since("INSERT VERSION")
+            .serializer(new TypeSerializer<>() {
+
+                @Override
+                public JsonElement serialize(@NotNull Gson gson, @NotNull Message value) {
+                    BsonValue encode = Message.CODEC.encode(value, new ExtraInfo());
+                    return gson.fromJson(encode.asDocument().toJson(), JsonElement.class);
+                }
+
+                @Override
+                public Message deserialize(@NotNull Gson gson, @NotNull JsonElement element) {
+                    BsonDocument decode = BsonDocument.parse(element.toString());
+                    return Message.CODEC.decode(decode, new ExtraInfo());
+                }
+            })
             .register();
         registration.newType(HytaleServer.class, "server", "server@s")
             .name("Server")
@@ -102,18 +137,58 @@ public class Types {
             .description("Represents a vector in 3D space using floats.",
                 "Often used for the rotation of entities in a world.")
             .since("INSERT VERSION")
+            .serializer(new TypeSerializer<>() {
+
+                @Override
+                public JsonElement serialize(@NotNull Gson gson, @NotNull Vector3f value) {
+                    BsonDocument encode = Vector3f.CODEC.encode(value, new ExtraInfo());
+                    return gson.fromJson(encode.toJson(), JsonElement.class);
+                }
+
+                @Override
+                public Vector3f deserialize(@NotNull Gson gson, @NotNull JsonElement element) {
+                    BsonDocument decode = BsonDocument.parse(element.toString());
+                    return Vector3f.CODEC.decode(decode, new ExtraInfo());
+                }
+            })
             .register();
         registration.newType(Vector3d.class, "vector3d", "vector3d@s")
             .name("Vector3d")
             .description("Represents a vector in 3D space using doubles.",
                 "Often used for the position of entities in a world.")
             .since("INSERT VERSION")
+            .serializer(new TypeSerializer<>() {
+                @Override
+                public JsonElement serialize(@NotNull Gson gson, @NotNull Vector3d value) {
+                    BsonDocument encode = Vector3d.CODEC.encode(value, new ExtraInfo());
+                    return gson.fromJson(encode.toJson(), JsonElement.class);
+                }
+
+                @Override
+                public Vector3d deserialize(@NotNull Gson gson, @NotNull JsonElement element) {
+                    BsonDocument decode = BsonDocument.parse(element.toString());
+                    return Vector3d.CODEC.decode(decode, new ExtraInfo());
+                }
+            })
             .register();
         registration.newType(Vector3i.class, "vector3i", "vector3i@s")
             .name("Vector3i")
             .description("Represents a vector in 3D space using integers.",
                 "Often used for the position of blocks in a world.")
             .since("INSERT VERSION")
+            .serializer(new TypeSerializer<>() {
+                @Override
+                public JsonElement serialize(@NotNull Gson gson, @NotNull Vector3i value) {
+                    BsonDocument encode = Vector3i.CODEC.encode(value, new ExtraInfo());
+                    return gson.fromJson(encode.toJson(), JsonElement.class);
+                }
+
+                @Override
+                public Vector3i deserialize(@NotNull Gson gson, @NotNull JsonElement element) {
+                    BsonDocument decode = BsonDocument.parse(element.toString());
+                    return Vector3i.CODEC.decode(decode, new ExtraInfo());
+                }
+            })
             .register();
         registration.newType(Location.class, "location", "location@s")
             .name("Location")
@@ -174,6 +249,19 @@ public class Types {
             .toStringFunction(itemStack -> {
                 String quantity = itemStack.getQuantity() == 1 ? "" : itemStack.getQuantity() + " of ";
                 return "itemstack of " + quantity + itemStack.getItem().getId();
+            })
+            .serializer(new TypeSerializer<>() {
+                @Override
+                public JsonElement serialize(@NotNull Gson gson, @NotNull ItemStack value) {
+                    BsonDocument encode = ItemStack.CODEC.encode(value, new ExtraInfo());
+                    String json = encode.toJson();
+                    return gson.fromJson(json, JsonElement.class);
+                }
+
+                @Override
+                public ItemStack deserialize(@NotNull Gson gson, @NotNull JsonElement element) {
+                    return ItemStack.CODEC.decode(BsonDocument.parse(element.toString()), new ExtraInfo());
+                }
             })
             .register();
         registration.newType(Inventory.class, "inventory", "inventor@y@ies")
@@ -274,6 +362,19 @@ public class Types {
             .examples("set {_i} to itemstack of Food_Fish_Grilled")
             .since("INSERT VERSION")
             .toStringFunction(Item::getId)
+            .serializer(new TypeSerializer<>() {
+
+                @Override
+                public JsonElement serialize(@NotNull Gson gson, @NotNull Item value) {
+                    BsonValue encode = Item.CODEC.encode(value, new ExtraInfo());
+                    return gson.fromJson(encode.asDocument().toJson(), JsonElement.class);
+                }
+
+                @Override
+                public Item deserialize(@NotNull Gson gson, @NotNull JsonElement element) {
+                    return Item.CODEC.decode(BsonDocument.parse(element.toString()), new ExtraInfo());
+                }
+            })
             .register();
         AssetStoreRegistry.register(registration, Projectile.class, Projectile.getAssetMap(), "projectile", "projectile@s")
             .name("Projectile")
