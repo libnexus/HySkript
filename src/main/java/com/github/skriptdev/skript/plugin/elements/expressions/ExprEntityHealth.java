@@ -72,8 +72,13 @@ public class ExprEntityHealth extends PropertyExpression<LivingEntity, Number> {
         EntityStatMap statMap = EntityComponentUtils.getEntityStatMap(entity);
         if (statMap == null) return;
 
+        if (changeMode == ChangeMode.RESET) {
+            statMap.resetStatValue(HEALTH_STATE_INDEX);
+            return;
+        }
+
         float newValue;
-        if (changeWith[0] instanceof Number number) {
+        if (changeWith.length > 0 && changeWith[0] instanceof Number number) {
             newValue = number.floatValue();
         } else {
             newValue = 0f;
@@ -90,9 +95,6 @@ public class ExprEntityHealth extends PropertyExpression<LivingEntity, Number> {
                 newValue = oldHealthValue - newValue;
             } else if (changeMode == ChangeMode.DELETE) {
                 newValue = 0f;
-            } else if (changeMode == ChangeMode.RESET) {
-                statMap.resetStatValue(HEALTH_STATE_INDEX);
-                return;
             }
         }
 
