@@ -36,6 +36,7 @@ import com.hypixel.hytale.server.core.entity.LivingEntity;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.modules.entity.damage.Damage;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageCause;
 import com.hypixel.hytale.server.core.modules.entitystats.asset.EntityStatType;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
@@ -102,6 +103,16 @@ public class Types {
             .description("Represents a command sender such as a player or the console.")
             .since("INSERT VERSION")
             .toStringFunction(CommandSender::getDisplayName)
+            .register();
+        registration.newType(Damage.class, "damage", "damage@s")
+            .name("Damage")
+            .description("Represents information about damage dealt to an entity.")
+            .since("INSERT VERSION")
+            .register();
+        registration.newType(Damage.Source.class, "damagesource", "damageSource@s")
+            .name("Damage Source")
+            .description("Represents the source of damage when an entity is damaged/killed.")
+            .since("INSERT VERSION")
             .register();
         registration.newType(IMessageReceiver.class, "messagereceiver", "messageReceiver@s")
             .name("Message Receiver")
