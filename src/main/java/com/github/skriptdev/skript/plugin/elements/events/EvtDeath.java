@@ -47,6 +47,10 @@ public class EvtDeath extends SkriptEvent {
         registration.addContextValue(EntityDeathContext.class,
             Entity.class, true, "victim", EntityDeathContext::getVictim);
         registration.addContextValue(EntityDeathContext.class,
+            Entity.class, true, "attacker", EntityDeathContext::getAttacker);
+        registration.addContextValue(EntityDeathContext.class,
+            Damage.Source.class, true, "damage-source", EntityDeathContext::getDamageSource);
+        registration.addContextValue(EntityDeathContext.class,
             DamageCause.class, true, "death-cause", EntityDeathContext::getDamageCause);
         registration.addContextValue(EntityDeathContext.class,
             Damage.class, true, "death-info", EntityDeathContext::getDamage);
@@ -97,9 +101,6 @@ public class EvtDeath extends SkriptEvent {
         public void onComponentAdded(@NotNull Ref<EntityStore> ref, @NotNull DeathComponent deathComponent, @NotNull Store<EntityStore> store, @NotNull CommandBuffer<EntityStore> buffer) {
             NPCEntity npc = buffer.getComponent(ref, NPCEntity.getComponentType());
             Player player = buffer.getComponent(ref, Player.getComponentType());
-            DamageCause damageCause = deathComponent.getDeathCause();
-            Damage damage = deathComponent.getDeathInfo();
-            ItemStack[] itemsLostOnDeath = deathComponent.getItemsLostOnDeath();
 
             int pattern;
             Entity victim;
@@ -112,7 +113,7 @@ public class EvtDeath extends SkriptEvent {
             } else return;
 
             for (Trigger trigger : this.event.getTriggers()) {
-                Statement.runAll(trigger, new EntityDeathContext(pattern, victim, damageCause, damage, itemsLostOnDeath));
+                Statement.runAll(trigger, new EntityDeathContext(pattern, victim, deathComponent));
             }
         }
 
@@ -122,36 +123,43 @@ public class EvtDeath extends SkriptEvent {
         }
     }
 
-    private static class EntityDeathContext implements TriggerContext {
-
-        private final int pattern;
-        private final Entity victim;
-        private final DamageCause damageCause;
-        private final Damage damage;
-        private final ItemStack[] itemsLostOnDeath;
-
-        public EntityDeathContext(int pattern, Entity victim, DamageCause damageCause, Damage damage, ItemStack[] itemsLostOnDeath) {
-            this.pattern = pattern;
-            this.victim = victim;
-            this.damageCause = damageCause;
-            this.damage = damage;
-            this.itemsLostOnDeath = itemsLostOnDeath;
-        }
+    @SuppressWarnings("DataFlowIssue")
+    private record EntityDeathContext(int pattern, Entity victim, DeathComponent component) implements TriggerContext {
 
         public Entity[] getVictim() {
             return new Entity[]{this.victim};
         }
 
+        public Entity[] getAttacker() {
+            Entity attacker = null;
+            if (this.component.getDeathInfo().getSource() instanceof Damage.EntitySource entitySource) {
+                Ref<EntityStore> attackerRef = entitySource.getRef();
+                Store<EntityStore> store = attackerRef.getStore();
+                Player player = store.getComponent(attackerRef, Player.getComponentType());
+                if (player != null) {
+                    attacker = player;
+                } else {
+                    NPCEntity npc = store.getComponent(attackerRef, NPCEntity.getComponentType());
+                    if (npc != null) attacker = npc;
+                }
+            }
+            return new Entity[]{attacker};
+        }
+
+        public Damage.Source[] getDamageSource() {
+            return new Damage.Source[]{this.component.getDeathInfo().getSource()};
+        }
+
         public DamageCause[] getDamageCause() {
-            return new DamageCause[]{this.damageCause};
+            return new DamageCause[]{this.component.getDeathCause()};
         }
 
         public Damage[] getDamage() {
-            return new Damage[]{this.damage};
+            return new Damage[]{this.component.getDeathInfo()};
         }
 
         public ItemStack[] getItemsLostOnDeath() {
-            return this.itemsLostOnDeath;
+            return this.component.getItemsLostOnDeath();
         }
 
         @Override
