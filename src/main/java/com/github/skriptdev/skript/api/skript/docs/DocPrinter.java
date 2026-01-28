@@ -13,6 +13,7 @@ import io.github.syst3ms.skriptparser.registration.ExpressionInfo;
 import io.github.syst3ms.skriptparser.registration.SkriptRegistration;
 import io.github.syst3ms.skriptparser.registration.SyntaxInfo;
 import io.github.syst3ms.skriptparser.registration.context.ContextValue;
+import io.github.syst3ms.skriptparser.types.PatternType;
 import io.github.syst3ms.skriptparser.types.Type;
 import org.jetbrains.annotations.NotNull;
 
@@ -110,7 +111,15 @@ public class DocPrinter {
             });
             if (!valuesForThisEvent.isEmpty()) {
                 writer.println("- **ContextValues**:");
-                valuesForThisEvent.forEach(contextValue -> writer.println("   - `context-" + contextValue.getPattern() + "`"));
+                valuesForThisEvent.forEach(contextValue -> {
+                    PatternElement pattern = contextValue.getPattern();
+                    PatternType<?> returnType = contextValue.getReturnType();
+                    boolean single = returnType.isSingle();
+                    String c = single ? "a single" : "multiple";
+                    String[] pluralForms = returnType.getType().getPluralForms();
+                    String baseName = pluralForms.length > 0 && !single ? pluralForms[1] : pluralForms[0];
+                    writer.println("   - `context-" + pattern + "` returns " + c + " " + baseName);
+                });
             }
         });
     }
