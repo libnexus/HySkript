@@ -1,9 +1,12 @@
 package com.github.skriptdev.skript.plugin.elements.types;
 
+import com.github.skriptdev.skript.api.hytale.Block;
+import com.github.skriptdev.skript.api.hytale.Direction;
 import com.github.skriptdev.skript.api.skript.command.ArgUtils;
 import com.github.skriptdev.skript.api.skript.registration.AssetStoreRegistry;
 import com.github.skriptdev.skript.api.skript.registration.EnumRegistry;
 import com.github.skriptdev.skript.api.skript.registration.NPCRegistry;
+import com.github.skriptdev.skript.api.skript.registration.SkriptRegistration;
 import com.github.skriptdev.skript.api.utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -45,7 +48,6 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
-import io.github.syst3ms.skriptparser.registration.SkriptRegistration;
 import io.github.syst3ms.skriptparser.types.TypeManager;
 import io.github.syst3ms.skriptparser.types.changers.TypeSerializer;
 import org.bson.BsonDocument;
@@ -60,6 +62,7 @@ public class Types {
     public static void register(SkriptRegistration registration) {
         Utils.log("Setting up Types");
         registerJavaTypes(registration);
+        registerCustomTypes(registration);
         registerServerTypes(registration);
         registerEntityTypes(registration);
         registerItemTypes(registration);
@@ -88,6 +91,17 @@ public class Types {
                     return UUID.fromString(element.getAsString());
                 }
             })
+            .register();
+    }
+
+    private static void registerCustomTypes(SkriptRegistration reg) {
+        reg.newType(Direction.class, "direction", "direction@s")
+            .name("Direction")
+            .description("Represents a direction in the world.")
+            .usage(Direction.getUsageString())
+            .literalParser(Direction::parse)
+            .toStringFunction(Direction::getName)
+            .since("INSERT VERSION")
             .register();
     }
 
@@ -299,6 +313,12 @@ public class Types {
     }
 
     private static void registerBlockTypes(SkriptRegistration registration) {
+        registration.newType(Block.class, "block", "block@s")
+            .name("Block")
+            .description("Represents a block in a world.")
+            .since("INSERT VERSION")
+            .toStringFunction(Block::toTypeString)
+            .register();
     }
 
     private static void registerWorldTypes(SkriptRegistration registration) {
@@ -357,7 +377,7 @@ public class Types {
             .toStringFunction(EntityEffect::getId)
             .register();
         AssetStoreRegistry.register(registration, EntityStatType.class, EntityStatType.getAssetMap(),
-            "entitystattype", "entityStatType@s")
+                "entitystattype", "entityStatType@s")
             .name("Entity Stat Type")
             .description("Represents the types of stats that can be applied to entities.", autoGenMessage())
             .since("INSERT VERSION")
