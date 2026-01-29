@@ -1,4 +1,4 @@
-package com.github.skriptdev.skript.plugin.elements.events;
+package com.github.skriptdev.skript.plugin.elements.events.player;
 
 import com.github.skriptdev.skript.api.skript.event.PlayerEventContext;
 import com.github.skriptdev.skript.plugin.HySk;

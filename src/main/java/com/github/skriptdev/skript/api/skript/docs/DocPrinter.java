@@ -1,5 +1,6 @@
 package com.github.skriptdev.skript.api.skript.docs;
 
+import com.github.skriptdev.skript.api.skript.event.CancellableContext;
 import com.github.skriptdev.skript.api.utils.Utils;
 import com.github.skriptdev.skript.plugin.HySk;
 import com.github.skriptdev.skript.plugin.Skript;
@@ -24,6 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DocPrinter {
 
@@ -102,6 +104,13 @@ public class DocPrinter {
                 printDocumentation("Event", writer, documentation, event.getPatterns());
             }
 
+            AtomicBoolean cancellable = new AtomicBoolean(false);
+            event.getContexts().forEach(context -> {
+                if (CancellableContext.class.isAssignableFrom(context)) {
+                    cancellable.set(true);
+                }
+            });
+            writer.println("- **Cancellable**: " + cancellable.get());
 
             List<ContextValue<?, ?>> valuesForThisEvent = new ArrayList<>();
             contextValues.forEach(contextValue -> {
@@ -165,7 +174,7 @@ public class DocPrinter {
         types.forEach(type -> {
             Documentation documentation = type.getDocumentation();
             printDocumentation("Type", writer, documentation, List.of());
-            writer.println("- **Can Serialize**: " + type.getSerializer().isPresent());
+            writer.println("- **Can Be Serialized**: " + type.getSerializer().isPresent());
         });
     }
 

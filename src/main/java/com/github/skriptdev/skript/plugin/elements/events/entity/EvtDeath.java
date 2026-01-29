@@ -1,4 +1,4 @@
-package com.github.skriptdev.skript.plugin.elements.events;
+package com.github.skriptdev.skript.plugin.elements.events.entity;
 
 import com.github.skriptdev.skript.api.skript.registration.SkriptRegistration;
 import com.github.skriptdev.skript.plugin.HySk;

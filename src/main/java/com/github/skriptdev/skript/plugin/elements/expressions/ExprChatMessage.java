@@ -1,8 +1,7 @@
 package com.github.skriptdev.skript.plugin.elements.expressions;
 
-import com.github.skriptdev.skript.api.skript.event.IEventContext;
+import com.github.skriptdev.skript.plugin.elements.events.player.EvtPlayerChat.PlayerChatContext;
 import com.hypixel.hytale.server.core.Message;
-import com.hypixel.hytale.server.core.event.events.player.PlayerChatEvent;
 import io.github.syst3ms.skriptparser.lang.Expression;
 import io.github.syst3ms.skriptparser.lang.TriggerContext;
 import io.github.syst3ms.skriptparser.parsing.ParseContext;
@@ -34,8 +33,8 @@ public class ExprChatMessage implements Expression<String> {
 
     @Override
     public String[] getValues(@NotNull TriggerContext ctx) {
-        if (ctx instanceof IEventContext<?> iEventContext && iEventContext.event() instanceof PlayerChatEvent chat) {
-            return new String[]{chat.getContent()};
+        if (ctx instanceof PlayerChatContext chat) {
+            return chat.getMessage();
         }
         return null;
     }
@@ -48,13 +47,13 @@ public class ExprChatMessage implements Expression<String> {
 
     @Override
     public void change(@NotNull TriggerContext ctx, @NotNull ChangeMode changeMode, Object @NotNull [] changeWith) {
-        if (ctx instanceof IEventContext<?> iEventContext && iEventContext.event() instanceof PlayerChatEvent chat) {
+        if (ctx instanceof PlayerChatContext chat) {
             if (changeWith[0] instanceof String s) {
-                chat.setContent(s);
+                chat.getEvent().setContent(s);
             } else if (changeWith[0] instanceof Message message) {
                 String rawText = message.getRawText();
                 if (rawText == null) rawText = "";
-                chat.setContent(rawText);
+                chat.getEvent().setContent(rawText);
             }
         }
     }
