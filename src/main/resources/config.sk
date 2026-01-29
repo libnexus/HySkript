@@ -21,7 +21,7 @@ databases:
 #       file: variables.json
 #       The file to save variables to.
 #
-#       pattern: (?!-).*
+#       pattern: .*
 #       The regex pattern to match variables to.
 #       '.*' = Will save all variables.
 #       '(?!-).*' = Will only save variables that don't start with '-' (ex: '{-some_var}' will not be saved).
@@ -31,4 +31,4 @@ databases:
         enabled: true
         file-type: json
         file: variables.json
-        pattern: .*
+        pattern: (?!-).*
