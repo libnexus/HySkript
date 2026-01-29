@@ -175,6 +175,7 @@ public class DocPrinter {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private static void printFunctions(PrintWriter writer) {
         Functions.getGlobalFunctions().forEach(function -> {
             if (function instanceof JavaFunction<?> jf) {
