@@ -23,14 +23,14 @@ public class ExpressionHandler {
         ExprMessageProperties.register(registration);
         ExprName.register(registration);
         ExprNPCType.register(registration);
+        ExprPlayerSpawns.register(registration);
         ExprUUID.register(registration);
         ExprUUIDRandom.register(registration);
         ExprVector3d.register(registration);
         ExprVector3f.register(registration);
         ExprVector3i.register(registration);
         ExprWorld.register(registration);
-        ExprWorldOfEntity.register(registration);
-        ExprWorldOfLocation.register(registration);
+        ExprWorldOf.register(registration);
         ExprWorldSpawn.register(registration);
     }
 
