@@ -1,7 +1,7 @@
 package com.github.skriptdev.skript.plugin.elements.expressions.player;
 
+import com.github.skriptdev.skript.api.hytale.PlayerUtils;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
 import io.github.syst3ms.skriptparser.lang.Expression;
 import io.github.syst3ms.skriptparser.lang.TriggerContext;
@@ -9,7 +9,6 @@ import io.github.syst3ms.skriptparser.parsing.ParseContext;
 import io.github.syst3ms.skriptparser.registration.SkriptRegistration;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,14 +37,13 @@ public class ExprAllPlayers implements Expression<Player> {
 
     @Override
     public Player[] getValues(@NotNull TriggerContext ctx) {
+        World world = null;
         if (this.world != null) {
             Optional<? extends World> single = this.world.getSingle(ctx);
-            return single.map(value -> value.getPlayers().toArray(new Player[0])).orElse(null);
-        } else {
-            List<Player> players = new ArrayList<>();
-            Universe.get().getWorlds().forEach((s, world) -> players.addAll(world.getPlayers()));
-            return players.toArray(new Player[0]);
+            if (single.isPresent()) world = single.get();
         }
+        List<Player> players = PlayerUtils.getPlayers(world);
+        return players.toArray(new Player[0]);
     }
 
     @Override
