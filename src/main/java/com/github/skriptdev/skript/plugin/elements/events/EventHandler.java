@@ -2,7 +2,7 @@ package com.github.skriptdev.skript.plugin.elements.events;
 
 
 import com.github.skriptdev.skript.api.skript.registration.SkriptRegistration;
-import com.github.skriptdev.skript.plugin.elements.events.entity.EvtDeath;
+import com.github.skriptdev.skript.plugin.elements.events.entity.EvtEntityDeath;
 import com.github.skriptdev.skript.plugin.elements.events.entity.EvtEntityRemove;
 import com.github.skriptdev.skript.plugin.elements.events.entity.EvtLivingEntityInvChange;
 import com.github.skriptdev.skript.plugin.elements.events.player.EvtPlayerAddToWorld;
@@ -23,7 +23,7 @@ public class EventHandler {
     public static void register(SkriptRegistration registration) {
         // ENTITY
         EvtEntityRemove.register(registration);
-        EvtDeath.register(registration);
+        EvtEntityDeath.register(registration);
         EvtLivingEntityInvChange.register(registration);
 
         // PLAYER

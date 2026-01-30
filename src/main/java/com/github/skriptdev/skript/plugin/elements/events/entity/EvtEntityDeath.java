@@ -25,12 +25,12 @@ import io.github.syst3ms.skriptparser.parsing.ParseContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class EvtDeath extends SkriptEvent {
+public class EvtEntityDeath extends SkriptEvent {
 
     public static void register(SkriptRegistration registration) {
-        registration.newEvent(EvtDeath.class, "death", "death of player", "death of npc")
+        registration.newEvent(EvtEntityDeath.class, "death", "death of player", "death of npc")
             .setHandledContexts(EntityDeathContext.class)
-            .name("Death Event")
+            .name("Entity Death")
             .description("Called when an entity dies.",
                 "**Patterns**:",
                 "- `on death` = Death of all entities (players and NPCs).",
@@ -89,9 +89,9 @@ public class EvtDeath extends SkriptEvent {
 
     private static class EntityDeathListener extends DeathSystems.OnDeathSystem {
 
-        private final EvtDeath event;
+        private final EvtEntityDeath event;
 
-        public EntityDeathListener(ComponentRegistryProxy<EntityStore> registry, EvtDeath event) {
+        public EntityDeathListener(ComponentRegistryProxy<EntityStore> registry, EvtEntityDeath event) {
             this.event = event;
             registry.registerSystem(this);
         }
