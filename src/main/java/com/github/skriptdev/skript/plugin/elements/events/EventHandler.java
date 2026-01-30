@@ -6,6 +6,7 @@ import com.github.skriptdev.skript.plugin.elements.events.entity.EvtDeath;
 import com.github.skriptdev.skript.plugin.elements.events.entity.EvtEntityRemove;
 import com.github.skriptdev.skript.plugin.elements.events.entity.EvtLivingEntityInvChange;
 import com.github.skriptdev.skript.plugin.elements.events.player.EvtPlayerAddToWorld;
+import com.github.skriptdev.skript.plugin.elements.events.player.EvtPlayerBreakBlock;
 import com.github.skriptdev.skript.plugin.elements.events.player.EvtPlayerChat;
 import com.github.skriptdev.skript.plugin.elements.events.player.EvtPlayerDrainFromWorld;
 import com.github.skriptdev.skript.plugin.elements.events.player.EvtPlayerJoin;
@@ -27,6 +28,7 @@ public class EventHandler {
 
         // PLAYER
         EvtPlayerAddToWorld.register(registration);
+        EvtPlayerBreakBlock.register(registration);
         EvtPlayerChat.register(registration);
         EvtPlayerDrainFromWorld.register(registration);
         EvtPlayerJoin.register(registration);
