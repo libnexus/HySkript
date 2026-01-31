@@ -3,6 +3,7 @@ package com.github.skriptdev.skript.plugin.elements;
 import com.github.skriptdev.skript.api.skript.registration.SkriptRegistration;
 import com.github.skriptdev.skript.plugin.elements.command.ScriptCommand;
 import com.github.skriptdev.skript.plugin.elements.command.ScriptSubCommand;
+import com.github.skriptdev.skript.plugin.elements.comparators.DefaultComparators;
 import com.github.skriptdev.skript.plugin.elements.conditions.ConditionHandler;
 import com.github.skriptdev.skript.plugin.elements.effects.EffectHandler;
 import com.github.skriptdev.skript.plugin.elements.events.EventHandler;
@@ -25,6 +26,9 @@ public class ElementRegistration {
 
         // TYPES
         Types.register(this.registration);
+
+        // COMPARATORS
+        DefaultComparators.register();
 
         // CONDITIONS
         ConditionHandler.register(this.registration);
