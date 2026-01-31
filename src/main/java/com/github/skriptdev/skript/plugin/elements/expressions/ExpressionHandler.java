@@ -13,9 +13,11 @@ import com.github.skriptdev.skript.plugin.elements.expressions.entity.ExprNPCTyp
 import com.github.skriptdev.skript.plugin.elements.expressions.entity.ExprName;
 import com.github.skriptdev.skript.plugin.elements.expressions.entity.ExprTargetEntityOfEntity;
 import com.github.skriptdev.skript.plugin.elements.expressions.item.ExprInventory;
+import com.github.skriptdev.skript.plugin.elements.expressions.item.ExprInventorySlot;
 import com.github.skriptdev.skript.plugin.elements.expressions.item.ExprItemContainer;
 import com.github.skriptdev.skript.plugin.elements.expressions.item.ExprItemStack;
 import com.github.skriptdev.skript.plugin.elements.expressions.item.ExprItemType;
+import com.github.skriptdev.skript.plugin.elements.expressions.item.ExprItemsInInventory;
 import com.github.skriptdev.skript.plugin.elements.expressions.other.ExprClassInfoOf;
 import com.github.skriptdev.skript.plugin.elements.expressions.other.ExprLocationDirection;
 import com.github.skriptdev.skript.plugin.elements.expressions.other.ExprLocationOf;
@@ -57,7 +59,9 @@ public class ExpressionHandler {
 
         // ITEM
         ExprInventory.register(registration);
+        ExprInventorySlot.register(registration);
         ExprItemContainer.register(registration);
+        ExprItemsInInventory.register(registration);
         ExprItemStack.register(registration);
         ExprItemType.register(registration);
 
