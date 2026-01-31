@@ -40,14 +40,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Documentation printer.
  */
-public class DocPrinter {
+public class MDDocPrinter {
 
     /**
      * Print all docs to file.
      */
     public static void printDocs() {
         Skript skript = HySk.getInstance().getSkript();
-        SkriptRegistration registration = skript.getRegistration();
+        SkriptRegistration registration = skript.getSkriptRegistration();
 
         try {
             Utils.log("Printing documentation");
@@ -342,7 +342,7 @@ public class DocPrinter {
     }
 
     static private @NotNull File getFile(String name) {
-        File file = HySk.getInstance().getDataDirectory().resolve("docs/" + name + ".md").toFile();
+        File file = HySk.getInstance().getDataDirectory().resolve("docs/md-docs/" + name + ".md").toFile();
         if (!file.exists()) {
             File parentFile = file.getParentFile();
             if (!parentFile.exists()) {
