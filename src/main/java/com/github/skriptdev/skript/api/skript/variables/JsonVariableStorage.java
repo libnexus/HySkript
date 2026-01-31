@@ -94,7 +94,6 @@ public class JsonVariableStorage extends VariableStorage {
             if (this.changes.get() >= this.changesToSave) {
                 try {
                     saveVariables(false);
-                    this.logger.info("Saved " + this.changes.get() + " changes to '" + this.file.getName() + "'"); // TODO REMOVE (debug)
                     this.changes.set(0);
                 } catch (IOException e) {
                     this.logger.error("Failed to save variable file", ErrorType.EXCEPTION);
