@@ -18,6 +18,7 @@ import io.github.syst3ms.skriptparser.parsing.ParserState;
 import io.github.syst3ms.skriptparser.parsing.SyntaxParser;
 import io.github.syst3ms.skriptparser.registration.context.ContextValue.Usage;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -37,6 +38,7 @@ public class EffectCommands {
                 PlayerRef sender = event.getSender();
 
                 // PERM CHECK
+                // Pretty sure the OP stuff doesn't work
                 PermissionsModule perm = PermissionsModule.get();
                 Set<String> groupsForUser = perm.getGroupsForUser(sender.getUuid());
                 if (!allowOps) {
@@ -49,13 +51,17 @@ public class EffectCommands {
 
                 event.setCancelled(true);
 
+                // Create dummy ParserState/Logger for effect commands
                 ParserState parserState = new ParserState();
                 parserState.setCurrentContexts(Set.of(PlayerEffectContext.class));
                 SkriptLogger skriptLogger = new SkriptLogger(true);
+                skriptLogger.setFileInfo("dummy_cause_this_doesnt_matter.sk", List.of());
 
+                // Parse effect
                 String effectString = event.getContent().substring(1);
                 Optional<? extends Effect> optionalEffect = SyntaxParser.parseEffect(effectString, parserState, skriptLogger);
 
+                // If no effect available, send logs
                 if (optionalEffect.isEmpty()) {
                     skriptLogger.finalizeLogs();
                     for (LogEntry logEntry : skriptLogger.close()) {
