@@ -1,4 +1,4 @@
-package com.github.skriptdev.skript.plugin.elements.effects;
+package com.github.skriptdev.skript.plugin.elements.effects.entity;
 
 import com.github.skriptdev.skript.api.hytale.EntityComponentUtils;
 import com.github.skriptdev.skript.api.skript.registration.SkriptRegistration;
