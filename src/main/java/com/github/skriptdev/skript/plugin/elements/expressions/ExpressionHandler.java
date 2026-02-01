@@ -9,6 +9,7 @@ import com.github.skriptdev.skript.plugin.elements.expressions.block.ExprBlockFl
 import com.github.skriptdev.skript.plugin.elements.expressions.block.ExprTargetBlockOfPlayer;
 import com.github.skriptdev.skript.plugin.elements.expressions.entity.ExprEntityHealth;
 import com.github.skriptdev.skript.plugin.elements.expressions.entity.ExprEntityStat;
+import com.github.skriptdev.skript.plugin.elements.expressions.entity.ExprHeldItem;
 import com.github.skriptdev.skript.plugin.elements.expressions.entity.ExprNPCType;
 import com.github.skriptdev.skript.plugin.elements.expressions.entity.ExprName;
 import com.github.skriptdev.skript.plugin.elements.expressions.entity.ExprTargetEntityOfEntity;
@@ -54,6 +55,7 @@ public class ExpressionHandler {
         // ENTITY
         ExprEntityHealth.register(registration);
         ExprEntityStat.register(registration);
+        ExprHeldItem.register(registration);
         ExprName.register(registration);
         ExprNPCType.register(registration);
         ExprTargetEntityOfEntity.register(registration);
