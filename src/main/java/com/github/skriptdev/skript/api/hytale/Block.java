@@ -134,9 +134,8 @@ public class Block {
         });
     }
 
-    public void breakBlock() {
-        int setting = 0; // TODO not sure what to actually use here
-        this.world.breakBlock(this.pos.getX(), this.pos.getY(), this.pos.getZ(), setting);
+    public void breakBlock(int settings) {
+        this.world.breakBlock(this.pos.getX(), this.pos.getY(), this.pos.getZ(), settings);
     }
 
     public @NotNull World getWorld() {
