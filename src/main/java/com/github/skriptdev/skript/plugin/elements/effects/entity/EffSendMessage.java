@@ -10,12 +10,14 @@ import io.github.syst3ms.skriptparser.lang.Expression;
 import io.github.syst3ms.skriptparser.lang.TriggerContext;
 import io.github.syst3ms.skriptparser.parsing.ParseContext;
 import io.github.syst3ms.skriptparser.registration.SkriptRegistration;
+import io.github.syst3ms.skriptparser.types.TypeManager;
 import org.jetbrains.annotations.NotNull;
 
 public class EffSendMessage extends Effect {
 
     public static void register(SkriptRegistration registration) {
-        registration.newEffect(EffSendMessage.class, "send [message[s]] %strings/messages% [to %-messagereceivers%]")
+        registration.newEffect(EffSendMessage.class,
+                "send [message[s]] %objects% [to %-messagereceivers%]")
             .name("Send Message")
             .description("Sends a message to a command sender such as a player or the console.")
             .examples("send \"Welcome to the server\" to player")
@@ -46,6 +48,8 @@ public class EffSendMessage extends Effect {
                         Utils.sendMessage(commandSender, string);
                     } else if (value instanceof Message message) {
                         commandSender.sendMessage(message);
+                    } else {
+                        Utils.sendMessage(commandSender, TypeManager.toString(new Object[]{value}));
                     }
                 }
             }
@@ -57,6 +61,8 @@ public class EffSendMessage extends Effect {
                             Utils.sendMessage(commandSender, string);
                         } else if (value instanceof Message message) {
                             commandSender.sendMessage(message);
+                        } else {
+                            Utils.sendMessage(commandSender, TypeManager.toString(new Object[]{value}));
                         }
                     }
                 }
@@ -66,6 +72,8 @@ public class EffSendMessage extends Effect {
                         Utils.log(s);
                     } else if (value instanceof Message message) {
                         Utils.log(message.getRawText());
+                    } else {
+                        Utils.log(TypeManager.toString(new Object[]{value}));
                     }
                 }
             }
