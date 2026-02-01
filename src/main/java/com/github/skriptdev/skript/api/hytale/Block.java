@@ -55,9 +55,9 @@ public class Block {
         return this.type;
     }
 
-    public void setType(@NotNull BlockType type) {
+    public void setType(@NotNull BlockType type, int settings) {
         this.type = type;
-        this.world.setBlock(this.pos.getX(), this.pos.getY(), this.pos.getZ(), type.getId());
+        this.world.setBlock(this.pos.getX(), this.pos.getY(), this.pos.getZ(), type.getId(), settings);
     }
 
     public byte getFluidLevel() {
