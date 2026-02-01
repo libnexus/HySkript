@@ -1,5 +1,6 @@
 package com.github.skriptdev.skript.plugin.elements.types;
 
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -14,7 +15,17 @@ import java.util.concurrent.atomic.AtomicReference;
 public class DefaultComparators {
 
     public static void register() {
+        block();
         inventory();
+    }
+
+    private static void block() {
+        Comparators.registerComparator(BlockType.class, BlockType.class, new Comparator<>(false) {
+            @Override
+            public Relation apply(@NotNull BlockType blockType1, @NotNull BlockType blockType2) {
+                return Relation.get(blockType1.getId().equals(blockType2.getId()));
+            }
+        });
     }
 
     private static void inventory() {
@@ -69,6 +80,14 @@ public class DefaultComparators {
                     }
                 });
                 return relation.get();
+            }
+        });
+
+        // Compare Item types
+        Comparators.registerComparator(Item.class, Item.class, new Comparator<>(false) {
+            @Override
+            public Relation apply(@NotNull Item item1, @NotNull Item item2) {
+                return Relation.get(item1.getId().equals(item2.getId()));
             }
         });
     }
