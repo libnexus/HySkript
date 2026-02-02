@@ -3,6 +3,7 @@ package com.github.skriptdev.skript.plugin.elements.events;
 
 import com.github.skriptdev.skript.api.skript.event.PlayerContext;
 import com.github.skriptdev.skript.api.skript.registration.SkriptRegistration;
+import com.github.skriptdev.skript.plugin.elements.events.block.EvtDamageBlock;
 import com.github.skriptdev.skript.plugin.elements.events.entity.EvtEntityDamage;
 import com.github.skriptdev.skript.plugin.elements.events.entity.EvtEntityDeath;
 import com.github.skriptdev.skript.plugin.elements.events.entity.EvtEntityRemove;
@@ -28,6 +29,9 @@ import io.github.syst3ms.skriptparser.registration.context.ContextValue.Usage;
 public class EventHandler {
 
     public static void register(SkriptRegistration registration) {
+        // BLOCK
+        EvtDamageBlock.register(registration);
+
         // ENTITY
         EvtEntityDamage.register(registration);
         EvtEntityRemove.register(registration);
