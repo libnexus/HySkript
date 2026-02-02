@@ -103,7 +103,7 @@ public class EvtPlayerUseBlock extends SystemEvent<EntityEventSystem<EntityStore
         public Block[] getBlock() {
             World world = this.player.getWorld();
             if (world == null) return null;
-            return new Block[]{new Block(world, this.event.getTargetBlock(), this.event.getBlockType())};
+            return new Block[]{new Block(world, this.event.getTargetBlock())};
         }
     }
 

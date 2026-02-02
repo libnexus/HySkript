@@ -69,7 +69,8 @@ public class EvtPlayerBreakBlock extends SystemEvent<EntityEventSystem<EntitySto
         return "player block break";
     }
 
-    private record BreakBlockEventContext(BreakBlockEvent event, Player player) implements PlayerContext, CancellableContext {
+    private record BreakBlockEventContext(BreakBlockEvent event,
+                                          Player player) implements PlayerContext, CancellableContext {
 
         public Player[] getPlayer() {
             return new Player[]{this.player};
@@ -80,7 +81,7 @@ public class EvtPlayerBreakBlock extends SystemEvent<EntityEventSystem<EntitySto
             Vector3i targetBlock = event.getTargetBlock();
             World world = this.player.getWorld();
             if (world == null || blockType == BlockType.EMPTY) return null;
-            Block block = new Block(world, targetBlock, blockType);
+            Block block = new Block(world, targetBlock);
             return new Block[]{block};
         }
 

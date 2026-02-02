@@ -33,19 +33,12 @@ public class Block {
         this.pos = pos;
     }
 
-    public Block(@NotNull World world, @NotNull Vector3i pos, @NotNull BlockType type) {
-        this.world = world;
-        this.pos = pos;
-    }
-
     public Block(@NotNull Location location) {
         World world = Universe.get().getWorld(location.getWorld());
         if (world == null) {
             throw new IllegalArgumentException("World '" + location.getWorld() + "' not found.");
         }
-        BlockType blockType = world.getBlockType(location.getPosition().toVector3i());
-        assert blockType != null;
-        this(world, location.getPosition().toVector3i(), blockType);
+        this(world, location.getPosition().toVector3i());
     }
 
     public @NotNull BlockType getType() {
@@ -90,7 +83,7 @@ public class Block {
 
                 Fluid fluid = fluidSection.getFluid(this.pos.getX(), this.pos.getY(), this.pos.getZ());
                 if (fluid == null) return null;
-                byte fluidLevel = (byte)Math.clamp((int)level, 0, fluid.getMaxFluidLevel());
+                byte fluidLevel = (byte) Math.clamp((int) level, 0, fluid.getMaxFluidLevel());
                 fluidSection.setFluid(this.pos.getX(), this.pos.getY(), this.pos.getZ(), fluid, fluidLevel);
             }
             return chunk;
@@ -128,9 +121,9 @@ public class Block {
                     fluidLevel = level.byteValue();
                 } else {
                     fluidLevel = fluidSection.getFluidLevel(this.pos.getX(), this.pos.getY(), this.pos.getZ());
-                    if (fluidLevel <= 0) fluidLevel = (byte)fluid.getMaxFluidLevel();
+                    if (fluidLevel <= 0) fluidLevel = (byte) fluid.getMaxFluidLevel();
                 }
-                fluidLevel = (byte)Math.clamp((int)fluidLevel, 0, fluid.getMaxFluidLevel());
+                fluidLevel = (byte) Math.clamp((int) fluidLevel, 0, fluid.getMaxFluidLevel());
                 Utils.log("Set fluid level to %s", fluidLevel);
                 fluidSection.setFluid(this.pos.getX(), this.pos.getY(), this.pos.getZ(), fluid, fluidLevel);
             }

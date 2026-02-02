@@ -80,7 +80,7 @@ public class EvtPlayerDamageBlock extends SystemEvent<EntityEventSystem<EntitySt
             Vector3i targetBlock = this.event.getTargetBlock();
             World world = this.player.getWorld();
             if (world == null) return null;
-            return new Block[]{new Block(world, targetBlock, this.event.getBlockType())};
+            return new Block[]{new Block(world, targetBlock)};
         }
 
         public BlockType[] getBlockType() {
