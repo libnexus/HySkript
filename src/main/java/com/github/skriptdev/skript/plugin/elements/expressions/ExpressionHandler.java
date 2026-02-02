@@ -3,6 +3,8 @@ package com.github.skriptdev.skript.plugin.elements.expressions;
 import com.github.skriptdev.skript.api.skript.registration.SkriptRegistration;
 import com.github.skriptdev.skript.plugin.elements.expressions.block.ExprBlockAt;
 import com.github.skriptdev.skript.plugin.elements.expressions.block.ExprBlockFluid;
+import com.github.skriptdev.skript.plugin.elements.expressions.block.ExprBlockIterator;
+import com.github.skriptdev.skript.plugin.elements.expressions.block.ExprBlockSphere;
 import com.github.skriptdev.skript.plugin.elements.expressions.block.ExprBlockTypeAtLocation;
 import com.github.skriptdev.skript.plugin.elements.expressions.block.ExprBlockTypeOfBlock;
 import com.github.skriptdev.skript.plugin.elements.expressions.block.ExprBlockFluidLevel;
@@ -51,6 +53,8 @@ public class ExpressionHandler {
         ExprBlockAt.register(registration);
         ExprBlockFluid.register(registration);
         ExprBlockFluidLevel.register(registration);
+        ExprBlockIterator.register(registration);
+        ExprBlockSphere.register(registration);
         ExprBlockTypeAtLocation.register(registration);
         ExprBlockTypeOfBlock.register(registration);
         ExprTargetBlockOfPlayer.register(registration);
