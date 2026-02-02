@@ -1,4 +1,4 @@
-package com.github.skriptdev.skript.plugin.elements.effects.entity;
+package com.github.skriptdev.skript.plugin.elements.effects.other;
 
 import com.github.skriptdev.skript.api.skript.event.PlayerContext;
 import com.github.skriptdev.skript.api.utils.Utils;
