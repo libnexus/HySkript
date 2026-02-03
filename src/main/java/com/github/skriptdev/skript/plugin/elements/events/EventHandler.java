@@ -1,6 +1,8 @@
 package com.github.skriptdev.skript.plugin.elements.events;
 
 
+import com.github.skriptdev.skript.api.hytale.Block;
+import com.github.skriptdev.skript.api.skript.event.BlockContext;
 import com.github.skriptdev.skript.api.skript.event.PlayerContext;
 import com.github.skriptdev.skript.api.skript.registration.SkriptRegistration;
 import com.github.skriptdev.skript.plugin.elements.events.entity.EvtEntityDamage;
@@ -62,6 +64,8 @@ public class EventHandler {
     }
 
     private static void registerGlobalContexts(SkriptRegistration reg) {
+        reg.newContextValue(BlockContext.class, Block.class, true, "block", BlockContext::getBlock)
+            .register();
         reg.newContextValue(PlayerContext.class, Player.class, true, "player", PlayerContext::getPlayer)
             .setUsage(Usage.EXPRESSION_OR_ALONE)
             .register();
