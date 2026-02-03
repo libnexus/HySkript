@@ -35,8 +35,8 @@ public class EvtEntityPickupItem extends SystemEvent<EntityEventSystem<EntitySto
             .setHandledContexts(PickupItemContext.class)
             .register();
 
-        reg.addContextValue(PickupItemContext.class, Entity.class, true, "entity", PickupItemContext::getEntity);
-        reg.addContextValue(PickupItemContext.class, ItemStack.class, true, "item-stack", PickupItemContext::getItemStack);
+        reg.addSingleContextValue(PickupItemContext.class, Entity.class, "entity", PickupItemContext::getEntity);
+        reg.addSingleContextValue(PickupItemContext.class, ItemStack.class, "item-stack", PickupItemContext::getItemStack);
     }
 
     private static PickupItemSystem SYSTEM;
@@ -68,16 +68,16 @@ public class EvtEntityPickupItem extends SystemEvent<EntityEventSystem<EntitySto
     public record PickupItemContext(InteractivelyPickupItemEvent event, Entity entity,
                                     int pattern) implements PlayerContext, CancellableContext {
 
-        public Entity[] getEntity() {
-            return new Entity[]{this.entity};
+        public Entity getEntity() {
+            return this.entity;
         }
 
-        public ItemStack[] getItemStack() {
-            return new ItemStack[]{this.event.getItemStack()};
+        public ItemStack getItemStack() {
+            return this.event.getItemStack();
         }
 
-        public Player[] getPlayer() {
-            if (this.entity instanceof Player p) return new Player[]{p};
+        public Player getPlayer() {
+            if (this.entity instanceof Player p) return p;
             return null;
         }
 

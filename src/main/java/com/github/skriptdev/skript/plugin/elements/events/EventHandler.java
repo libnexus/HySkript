@@ -68,9 +68,9 @@ public class EventHandler {
     }
 
     private static void registerGlobalContexts(SkriptRegistration reg) {
-        reg.newContextValue(BlockContext.class, Block.class, true, "block", BlockContext::getBlock)
+        reg.newSingleContextValue(BlockContext.class, Block.class, "block", BlockContext::getBlock)
             .register();
-        reg.newContextValue(PlayerContext.class, Player.class, true, "player", PlayerContext::getPlayer)
+        reg.newSingleContextValue(PlayerContext.class, Player.class, "player", PlayerContext::getPlayer)
             .setUsage(Usage.EXPRESSION_OR_ALONE)
             .register();
     }

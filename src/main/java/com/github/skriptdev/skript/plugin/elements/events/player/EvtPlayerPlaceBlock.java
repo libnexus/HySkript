@@ -44,10 +44,10 @@ public class EvtPlayerPlaceBlock extends SystemEvent<EntityEventSystem<EntitySto
             .setHandledContexts(PlaceBlockContext.class)
             .register();
 
-        reg.addContextValue(PlaceBlockContext.class, Item.class, true, "item-in-hand", PlaceBlockContext::getItemInHand);
-        reg.addContextValue(PlaceBlockContext.class, ItemStack.class, true, "itemstack-in-hand", PlaceBlockContext::getItemStackInHand);
-        reg.addContextValue(PlaceBlockContext.class, BlockType.class, true, "blocktype", PlaceBlockContext::getPlacedBlockType);
-        reg.newContextValue(PlaceBlockContext.class, BlockType.class, true, "blocktype", PlaceBlockContext::getPreviousBlockType)
+        reg.addSingleContextValue(PlaceBlockContext.class, Item.class, "item-in-hand", PlaceBlockContext::getItemInHand);
+        reg.addSingleContextValue(PlaceBlockContext.class, ItemStack.class, "itemstack-in-hand", PlaceBlockContext::getItemStackInHand);
+        reg.addSingleContextValue(PlaceBlockContext.class, BlockType.class, "blocktype", PlaceBlockContext::getPlacedBlockType);
+        reg.newSingleContextValue(PlaceBlockContext.class, BlockType.class, "blocktype", PlaceBlockContext::getPreviousBlockType)
             .setState(ContextValue.State.PAST)
             .register();
     }
@@ -76,40 +76,38 @@ public class EvtPlayerPlaceBlock extends SystemEvent<EntityEventSystem<EntitySto
     public record PlaceBlockContext(PlaceBlockEvent event,
                                     Player player) implements PlayerContext, BlockContext, CancellableContext {
 
-        public Player[] getPlayer() {
-            return new Player[]{this.player};
+        public Player getPlayer() {
+            return this.player;
         }
 
-        public Item[] getItemInHand() {
+        public Item getItemInHand() {
             ItemStack itemInHand = this.event.getItemInHand();
             if (itemInHand == null) return null;
-            return new Item[]{itemInHand.getItem()};
+            return itemInHand.getItem();
         }
 
-        public ItemStack[] getItemStackInHand() {
-            return new ItemStack[]{this.event.getItemInHand()};
+        public ItemStack getItemStackInHand() {
+            return this.event.getItemInHand();
         }
 
-        public BlockType[] getPreviousBlockType() {
-            Block[] block = getBlock();
+        public BlockType getPreviousBlockType() {
+            Block block = getBlock();
             if (block == null) return null;
-            Block block1 = block[0];
-            if (block1 == null) return null;
-            return new BlockType[]{block1.getType()};
+            return block.getType();
         }
 
-        public BlockType[] getPlacedBlockType() {
+        public BlockType getPlacedBlockType() {
             ItemStack itemInHand = this.event.getItemInHand();
             if (itemInHand == null) return null;
-            return new BlockType[]{AssetStoreUtils.getBlockType(itemInHand.getItem())};
+            return AssetStoreUtils.getBlockType(itemInHand.getItem());
         }
 
         @Override
-        public Block[] getBlock() {
+        public Block getBlock() {
             Vector3i targetBlock = this.event.getTargetBlock();
             World world = this.player.getWorld();
             if (world == null) return null;
-            return new Block[]{new Block(world, targetBlock)};
+            return new Block(world, targetBlock);
         }
 
         @Override

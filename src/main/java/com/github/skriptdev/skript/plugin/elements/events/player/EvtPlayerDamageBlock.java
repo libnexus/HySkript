@@ -36,11 +36,11 @@ public class EvtPlayerDamageBlock extends SystemEvent<EntityEventSystem<EntitySt
             .since("1.0.0")
             .register();
 
-        reg.addContextValue(DamageBlockContext.class, Block.class, true, "block", DamageBlockContext::getBlock);
-        reg.addContextValue(DamageBlockContext.class, BlockType.class, true, "blocktype", DamageBlockContext::getBlockType);
-        reg.addContextValue(DamageBlockContext.class, ItemStack.class, true, "itemstack-in-hand", DamageBlockContext::getItemStackInHand);
-        reg.addContextValue(DamageBlockContext.class, Number.class, true, "damage", DamageBlockContext::getDamage);
-        reg.addContextValue(DamageBlockContext.class, Number.class, true, "current-damage", DamageBlockContext::getCurrentDamage);
+        reg.addSingleContextValue(DamageBlockContext.class, Block.class, "block", DamageBlockContext::getBlock);
+        reg.addSingleContextValue(DamageBlockContext.class, BlockType.class, "blocktype", DamageBlockContext::getBlockType);
+        reg.addSingleContextValue(DamageBlockContext.class, ItemStack.class, "itemstack-in-hand", DamageBlockContext::getItemStackInHand);
+        reg.addSingleContextValue(DamageBlockContext.class, Number.class, "damage", DamageBlockContext::getDamage);
+        reg.addSingleContextValue(DamageBlockContext.class, Number.class, "current-damage", DamageBlockContext::getCurrentDamage);
     }
 
     private static DamageBlockSystem SYSTEM;
@@ -68,31 +68,31 @@ public class EvtPlayerDamageBlock extends SystemEvent<EntityEventSystem<EntitySt
         implements PlayerContext, CancellableContext {
 
         @Override
-        public Player[] getPlayer() {
-            return new Player[]{this.player};
+        public Player getPlayer() {
+            return this.player;
         }
 
-        public ItemStack[] getItemStackInHand() {
-            return new ItemStack[]{this.event.getItemInHand()};
+        public ItemStack getItemStackInHand() {
+            return this.event.getItemInHand();
         }
 
-        public Block[] getBlock() {
+        public Block getBlock() {
             Vector3i targetBlock = this.event.getTargetBlock();
             World world = this.player.getWorld();
             if (world == null) return null;
-            return new Block[]{new Block(world, targetBlock)};
+            return new Block(world, targetBlock);
         }
 
-        public BlockType[] getBlockType() {
-            return new BlockType[]{this.event.getBlockType()};
+        public BlockType getBlockType() {
+            return this.event.getBlockType();
         }
 
-        public Number[] getDamage() {
-            return new Number[]{this.event.getDamage()};
+        public Number getDamage() {
+            return this.event.getDamage();
         }
 
-        public Number[] getCurrentDamage() {
-            return new Number[]{this.event.getCurrentDamage()};
+        public Number getCurrentDamage() {
+            return this.event.getCurrentDamage();
         }
 
         @Override

@@ -8,6 +8,6 @@ import io.github.syst3ms.skriptparser.lang.TriggerContext;
  */
 public interface BlockContext extends TriggerContext {
 
-    Block[] getBlock();
+    Block getBlock();
 
 }
