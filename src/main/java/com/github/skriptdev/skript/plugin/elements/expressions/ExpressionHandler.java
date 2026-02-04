@@ -10,6 +10,8 @@ import com.github.skriptdev.skript.plugin.elements.expressions.block.ExprBlockTy
 import com.github.skriptdev.skript.plugin.elements.expressions.block.ExprBlockFluidLevel;
 import com.github.skriptdev.skript.plugin.elements.expressions.block.ExprTargetBlockOfPlayer;
 import com.github.skriptdev.skript.plugin.elements.expressions.entity.ExprActiveSlot;
+import com.github.skriptdev.skript.plugin.elements.expressions.entityeffect.ExprActiveEntityEffectDuration;
+import com.github.skriptdev.skript.plugin.elements.expressions.entityeffect.ExprActiveEntityEffects;
 import com.github.skriptdev.skript.plugin.elements.expressions.entity.ExprEntityHealth;
 import com.github.skriptdev.skript.plugin.elements.expressions.entity.ExprEntityStat;
 import com.github.skriptdev.skript.plugin.elements.expressions.entity.ExprEntityVelocity;
@@ -17,6 +19,7 @@ import com.github.skriptdev.skript.plugin.elements.expressions.entity.ExprHeldIt
 import com.github.skriptdev.skript.plugin.elements.expressions.entity.ExprNPCType;
 import com.github.skriptdev.skript.plugin.elements.expressions.entity.ExprName;
 import com.github.skriptdev.skript.plugin.elements.expressions.entity.ExprTargetEntityOfEntity;
+import com.github.skriptdev.skript.plugin.elements.expressions.entityeffect.ExprActiveEntityEffectEffect;
 import com.github.skriptdev.skript.plugin.elements.expressions.item.ExprInventory;
 import com.github.skriptdev.skript.plugin.elements.expressions.item.ExprInventorySlot;
 import com.github.skriptdev.skript.plugin.elements.expressions.item.ExprInventorySlots;
@@ -71,6 +74,11 @@ public class ExpressionHandler {
         ExprName.register(registration);
         ExprNPCType.register(registration);
         ExprTargetEntityOfEntity.register(registration);
+
+        // ENTITY EFFECT
+        ExprActiveEntityEffectDuration.register(registration);
+        ExprActiveEntityEffectEffect.register(registration);
+        ExprActiveEntityEffects.register(registration);
 
         // ITEM
         ExprInventory.register(registration);
