@@ -29,6 +29,7 @@ import com.github.skriptdev.skript.plugin.elements.expressions.item.ExprItemType
 import com.github.skriptdev.skript.plugin.elements.expressions.item.ExprItemsInInventory;
 import com.github.skriptdev.skript.plugin.elements.expressions.other.ExprCast;
 import com.github.skriptdev.skript.plugin.elements.expressions.other.ExprClassInfoOf;
+import com.github.skriptdev.skript.plugin.elements.expressions.other.ExprCurrentContext;
 import com.github.skriptdev.skript.plugin.elements.expressions.other.ExprDistance;
 import com.github.skriptdev.skript.plugin.elements.expressions.other.ExprLocationDirection;
 import com.github.skriptdev.skript.plugin.elements.expressions.other.ExprLocationOf;
@@ -124,6 +125,9 @@ public class ExpressionHandler {
         ExprWorld.register(registration);
         ExprWorldOf.register(registration);
         ExprWorldSpawn.register(registration);
+
+        // TEST
+        ExprCurrentContext.register(registration);
 
     }
 
