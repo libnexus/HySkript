@@ -10,6 +10,8 @@ import com.hypixel.hytale.server.core.util.BsonUtil;
 import io.github.syst3ms.skriptparser.config.Config.ConfigSection;
 import io.github.syst3ms.skriptparser.log.ErrorType;
 import io.github.syst3ms.skriptparser.log.SkriptLogger;
+import io.github.syst3ms.skriptparser.types.TypeManager;
+import io.github.syst3ms.skriptparser.types.changers.TypeSerializer;
 import io.github.syst3ms.skriptparser.variables.VariableStorage;
 import io.github.syst3ms.skriptparser.variables.Variables;
 import org.bson.BsonBinaryReader;
@@ -40,6 +42,7 @@ import java.nio.file.Path;
 import java.util.Locale;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -49,7 +52,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class JsonVariableStorage extends VariableStorage {
 
     public enum Type {
-        JSON, BSON;
+        JSON, BSON
     }
 
     private File file;
@@ -104,6 +107,7 @@ public class JsonVariableStorage extends VariableStorage {
 
     private void loadVariablesFromFile() {
         Utils.log("Loading variables from file...");
+        AtomicBoolean markForBackup = new AtomicBoolean(false);
 
         try {
             if (this.type == Type.JSON) {
@@ -143,7 +147,10 @@ public class JsonVariableStorage extends VariableStorage {
                         return;
                     }
 
-                    loadVariable(name, type, jsonValue);
+                    if (!tryLoadVariable(name, type, jsonValue)) {
+                        markForBackup.set(true);
+                        variablesDocument.remove(name);
+                    }
                     count.getAndIncrement();
                     if (System.currentTimeMillis() - start.get() > 500) {
                         // If it's taking too long, log progress
@@ -151,7 +158,11 @@ public class JsonVariableStorage extends VariableStorage {
                         Utils.log(" - Loaded " + count.get() + " variables so far...");
                     }
                 });
-                Utils.log("Loaded " + count.get() + " variables from file!");
+                Utils.log("Loaded %s variables from file!", count.get());
+            }
+            if (markForBackup.get()) {
+                Utils.warn("Failed to load some variables from file. Creating backup...");
+                Files.copy(this.file.toPath(), this.file.toPath().resolveSibling(this.file.getName() + ".bak"));
             }
 
         } catch (IOException e) {
@@ -250,6 +261,39 @@ public class JsonVariableStorage extends VariableStorage {
         } finally {
             Variables.getLock().unlock();
         }
+    }
+
+    @SuppressWarnings("ConstantValue")
+    private boolean tryLoadVariable(@NotNull String name, @NotNull String type, @NotNull JsonElement value) {
+        if (value == null || type == null) { // These shouldn't be null, but things happen
+            Utils.error("value and/or typeName cannot be null");
+            return false;
+        }
+        Object deserialize = deserialize(name, type, value);
+        if (deserialize == null) {
+            return false;
+        }
+        Variables.getVariableMap().setVariable(name, deserialize);
+        return true;
+    }
+
+    @SuppressWarnings("ConstantValue")
+    protected Object deserialize(String varName, @NotNull String typeName, @NotNull JsonElement value) {
+        if (value == null || typeName == null) {
+            Utils.error("value and/or typeName cannot be null");
+            return null;
+        }
+        io.github.syst3ms.skriptparser.types.Type<?> type = TypeManager.getByExactName(typeName).orElse(null);
+        if (type == null) {
+            Utils.error("Variable '%s' with type '%s' cannot be deserialized. No type registered. This variable will be removed.", varName, typeName);
+            return null;
+        }
+        TypeSerializer<?> serializer = type.getSerializer().orElse(null);
+        if (serializer == null) {
+            Utils.error("Variable '%s' cannot be deserialized. The type '%s' has no serializer. This variable will be removed.", varName, typeName);
+            return null;
+        }
+        return serializer.deserialize(this.gson, value);
     }
 
     private void readJsonFile() throws IOException {
