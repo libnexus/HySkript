@@ -26,9 +26,11 @@ public class EvtPlayerChangeGameMode extends SystemEvent<EntityEventSystem<Entit
 
     public static void register(SkriptRegistration reg) {
         reg.newEvent(EvtPlayerChangeGameMode.class, "[player(s| )] game[ ]mode change[s]")
-                .setHandledContexts(PlayerChangeGameModeContext.class).
-                name("Player Change GameMode").description("Called when a player's game-mode is changed.")
-                .since("1.0.4").register();
+                .setHandledContexts(PlayerChangeGameModeContext.class)
+                .name("Player Change GameMode")
+                .description("Called when a player's game-mode is changed.")
+                .since("INSERT VERSION")
+                .register();
 
         reg.addSingleContextValue(PlayerChangeGameModeContext.class, GameMode.class, "new-game-mode", PlayerChangeGameModeContext::getNewGameMode);
         reg.addSingleContextValue(PlayerChangeGameModeContext.class, GameMode.class, "current-game-mode", PlayerChangeGameModeContext::getOldGameMode);
